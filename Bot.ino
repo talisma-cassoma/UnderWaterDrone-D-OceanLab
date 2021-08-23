@@ -1,3 +1,10 @@
+/*
+ESP32-CAM Base64
+Author : ChungYi Fu (Kaohsiung, Taiwan)  2019-8-14 21:00
+https://www.facebook.com/francefu
+*/
+
+
 #include <IOXhop_FirebaseESP32.h>  //funcionando com a versao 5.1.1 do <arduinoJson.h>   
 
 #include "soc/soc.h"
@@ -5,10 +12,21 @@
 #include "Base64.h"
 
 
-#define WIFI_SSID "*********"                   
-#define WIFI_PASSWORD "*************"         
-#define FIREBASE_HOST "https://**********.firebaseio.com/"    
-#define FIREBASE_AUTH "***************************"   
+#define WIFI_SSID "*************"                    
+#define WIFI_PASSWORD "*************"          
+#define FIREBASE_HOST "*************"      
+#define FIREBASE_AUTH "*************"   
+
+
+
+#define IN1_PIN 12 //dc motors pin controls
+#define IN2_PIN 13
+#define IN3_PIN 14 //electric cylinder pin controls
+#define IN4_PIN 15
+
+bool startBot = false;
+bool BotMotorSense= false;
+bool diveBot = false;
 
 
 #include "esp_camera.h"
@@ -41,6 +59,11 @@ void setup()
   
   Serial.begin(115200);
   delay(10);
+
+pinMode(IN1_PIN, OUTPUT);
+pinMode(IN2_PIN, OUTPUT);
+pinMode(IN3_PIN, OUTPUT);
+pinMode(IN4_PIN, OUTPUT);
 
   camera_config_t config;
   config.ledc_channel = LEDC_CHANNEL_0;
@@ -106,12 +129,22 @@ void setup()
 void loop()
 {
    String photo = Photo2Base64();
-   Firebase.setString("/esp32-cam", photo);
+   Firebase.setString("/imageCaptured/base64Image", photo);
+   
+   startBot =      Firebase.getBool("/controls/rotate/status");
+   BotMotorSense = Firebase.getBool("/controls/rotate/sense");
+   diveBot=        Firebase.getBool("/controls/dive");
    Serial.println(photo);
+   Serial.println(startBot);
+   Serial.println(BotMotorSense);
+   Serial.println(diveBot);
+   //controls
+   BotControls(startBot, BotMotorSense, diveBot); 
+   
   delay(100);
 }
 
-String Photo2Base64() {
+String Photo2Base64(){
     camera_fb_t * fb = NULL;
     fb = esp_camera_fb_get();  
     if(!fb) {
@@ -165,4 +198,24 @@ String urlencode(String str)
       yield();
     }
     return encodedString;
+}
+void BotControls(bool start, bool MotorSense, bool dive){
+if(start){
+   if(dive){// SET DIVE 
+      digitalWrite(IN1_PIN, LOW);
+      digitalWrite(IN2_PIN, HIGH);
+    }
+    else{
+      digitalWrite(IN1_PIN, HIGH);
+      digitalWrite(IN2_PIN, LOW);
+      }
+     if(MotorSense){//CLOCKISE ROTATION
+      digitalWrite(IN3_PIN, LOW);
+      digitalWrite(IN4_PIN, HIGH);
+    }
+    else{
+      digitalWrite(IN3_PIN, HIGH);
+      digitalWrite(IN4_PIN, LOW);
+      }
+  }
 }
