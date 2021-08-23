@@ -1,10 +1,7 @@
 /*
-ESP32-CAM Base64
-Author : ChungYi Fu (Kaohsiung, Taiwan)  2019-8-14 21:00
-https://www.facebook.com/francefu
+INTELLCAP_BOT
+IBIN TOFAIL UNIVERSITY - KENITRA
 */
-
-
 #include <IOXhop_FirebaseESP32.h>  //funcionando com a versao 5.1.1 do <arduinoJson.h>   
 
 #include "soc/soc.h"
@@ -16,9 +13,6 @@ https://www.facebook.com/francefu
 #define WIFI_PASSWORD "*************"          
 #define FIREBASE_HOST "*************"      
 #define FIREBASE_AUTH "*************"   
-
-
-
 #define IN1_PIN 12 //dc motors pin controls
 #define IN2_PIN 13
 #define IN3_PIN 14 //electric cylinder pin controls
@@ -200,8 +194,8 @@ String urlencode(String str)
     return encodedString;
 }
 void BotControls(bool start, bool MotorSense, bool dive){
-if(start){
-   if(dive){// SET DIVE 
+if(start){//put it On   
+  if(dive){// SET DIVE 
       digitalWrite(IN1_PIN, LOW);
       digitalWrite(IN2_PIN, HIGH);
     }
@@ -217,5 +211,8 @@ if(start){
       digitalWrite(IN3_PIN, HIGH);
       digitalWrite(IN4_PIN, LOW);
       }
-  }
+  }else{//put it off
+    digitalWrite(IN1_PIN, LOW);
+    digitalWrite(IN2_PIN, LOW);
+    }
 }
