@@ -135,7 +135,7 @@ void loop()
    //controls
    BotControls(startBot, BotMotorSense, diveBot); 
    
-  delay(100);
+  delay(50);
 }
 
 String Photo2Base64(){
