@@ -22,7 +22,6 @@ bool startBot = false;
 bool BotMotorSense= false;
 bool diveBot = false;
 
-
 #include "esp_camera.h"
 
 // WARNING!!! Make sure that you have either selected ESP32 Wrover Module,
@@ -47,96 +46,6 @@ bool diveBot = false;
 #define HREF_GPIO_NUM     23
 #define PCLK_GPIO_NUM     22
 
-void setup()
-{
-  WRITE_PERI_REG(RTC_CNTL_BROWN_OUT_REG, 0);
-  
-  Serial.begin(115200);
-  delay(10);
-
-pinMode(IN1_PIN, OUTPUT);
-pinMode(IN2_PIN, OUTPUT);
-pinMode(IN3_PIN, OUTPUT);
-pinMode(IN4_PIN, OUTPUT);
-
-  camera_config_t config;
-  config.ledc_channel = LEDC_CHANNEL_0;
-  config.ledc_timer = LEDC_TIMER_0;
-  config.pin_d0 = Y2_GPIO_NUM;
-  config.pin_d1 = Y3_GPIO_NUM;
-  config.pin_d2 = Y4_GPIO_NUM;
-  config.pin_d3 = Y5_GPIO_NUM;
-  config.pin_d4 = Y6_GPIO_NUM;
-  config.pin_d5 = Y7_GPIO_NUM;
-  config.pin_d6 = Y8_GPIO_NUM;
-  config.pin_d7 = Y9_GPIO_NUM;
-  config.pin_xclk = XCLK_GPIO_NUM;
-  config.pin_pclk = PCLK_GPIO_NUM;
-  config.pin_vsync = VSYNC_GPIO_NUM;
-  config.pin_href = HREF_GPIO_NUM;
-  config.pin_sscb_sda = SIOD_GPIO_NUM;
-  config.pin_sscb_scl = SIOC_GPIO_NUM;
-  config.pin_pwdn = PWDN_GPIO_NUM;
-  config.pin_reset = RESET_GPIO_NUM;
-  config.xclk_freq_hz = 20000000;
-  config.pixel_format = PIXFORMAT_JPEG;
-  //init with high specs to pre-allocate larger buffers
-  if(psramFound()){
-    config.frame_size = FRAMESIZE_UXGA;
-    config.jpeg_quality = 10;  //0-63 lower number means higher quality
-    config.fb_count = 2;
-  } else {
-    config.frame_size = FRAMESIZE_SVGA;
-    config.jpeg_quality = 12;  //0-63 lower number means higher quality
-    config.fb_count = 1;
-  }
-  
-  // camera init
-  esp_err_t err = esp_camera_init(&config);
-  if (err != ESP_OK) {
-    Serial.printf("Camera init failed with error 0x%x", err);
-    delay(1000);
-    ESP.restart();
-  }
-
-  //drop down frame size for higher initial frame rate
-  sensor_t * s = esp_camera_sensor_get();
-  s->set_framesize(s, FRAMESIZE_QQVGA);  // UXGA|SXGA|XGA|SVGA|VGA|CIF|QVGA|HQVGA|QQVGA
-
-  //WIFI
-  WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
-  
-  Serial.print("Conectando ao wifi");
-  
-  while (WiFi.status() != WL_CONNECTED)
-  {
-    Serial.print(".");
-    delay(300);
-  }
-  
-  Serial.println();
-
-  Firebase.begin(FIREBASE_HOST, FIREBASE_AUTH);
-
-}
-
-void loop()
-{
-   String photo = Photo2Base64();
-   Firebase.setString("/imageCaptured/base64Image", photo);
-   
-   startBot =      Firebase.getBool("/controls/rotate/status");
-   BotMotorSense = Firebase.getBool("/controls/rotate/sense");
-   diveBot=        Firebase.getBool("/controls/dive");
-   Serial.println(photo);
-   Serial.println(startBot);
-   Serial.println(BotMotorSense);
-   Serial.println(diveBot);
-   //controls
-   BotControls(startBot, BotMotorSense, diveBot); 
-   
-  delay(50);
-}
 
 String Photo2Base64(){
     camera_fb_t * fb = NULL;
@@ -215,4 +124,94 @@ if(start){//put it On
     digitalWrite(IN1_PIN, LOW);
     digitalWrite(IN2_PIN, LOW);
     }
+}
+
+void setup()
+{
+  WRITE_PERI_REG(RTC_CNTL_BROWN_OUT_REG, 0);
+  
+  Serial.begin(115200);
+  delay(10);
+
+pinMode(IN1_PIN, OUTPUT);
+pinMode(IN2_PIN, OUTPUT);
+pinMode(IN3_PIN, OUTPUT);
+pinMode(IN4_PIN, OUTPUT);
+
+  camera_config_t config;
+  config.ledc_channel = LEDC_CHANNEL_0;
+  config.ledc_timer = LEDC_TIMER_0;
+  config.pin_d0 = Y2_GPIO_NUM;
+  config.pin_d1 = Y3_GPIO_NUM;
+  config.pin_d2 = Y4_GPIO_NUM;
+  config.pin_d3 = Y5_GPIO_NUM;
+  config.pin_d4 = Y6_GPIO_NUM;
+  config.pin_d5 = Y7_GPIO_NUM;
+  config.pin_d6 = Y8_GPIO_NUM;
+  config.pin_d7 = Y9_GPIO_NUM;
+  config.pin_xclk = XCLK_GPIO_NUM;
+  config.pin_pclk = PCLK_GPIO_NUM;
+  config.pin_vsync = VSYNC_GPIO_NUM;
+  config.pin_href = HREF_GPIO_NUM;
+  config.pin_sscb_sda = SIOD_GPIO_NUM;
+  config.pin_sscb_scl = SIOC_GPIO_NUM;
+  config.pin_pwdn = PWDN_GPIO_NUM;
+  config.pin_reset = RESET_GPIO_NUM;
+  config.xclk_freq_hz = 20000000;
+  config.pixel_format = PIXFORMAT_JPEG;
+  //init with high specs to pre-allocate larger buffers
+  if(psramFound()){
+    config.frame_size = FRAMESIZE_QVGA;
+    config.jpeg_quality = 8;  //0-63 lower number means higher quality
+    config.fb_count = 2;
+  } else {
+    config.frame_size = FRAMESIZE_QVGA;
+    config.jpeg_quality = 10;  //0-63 lower number means higher quality
+    config.fb_count = 1;
+  }
+  
+  // camera init
+  esp_err_t err = esp_camera_init(&config);
+  if (err != ESP_OK) {
+    Serial.printf("Camera init failed with error 0x%x", err);
+    delay(1000);
+    ESP.restart();
+  }
+
+  //drop down frame size for higher initial frame rate
+  sensor_t * s = esp_camera_sensor_get();
+  s->set_framesize(s, FRAMESIZE_QQVGA);  // UXGA|SXGA|XGA|SVGA|VGA|CIF|QVGA|HQVGA|QQVGA
+
+  //WIFI
+  WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
+  
+  Serial.print("Conectando ao wifi");
+  
+  while (WiFi.status() != WL_CONNECTED)
+  {
+    Serial.print(".");
+    delay(100);
+  }
+  
+  Serial.println();
+
+  Firebase.begin(FIREBASE_HOST, FIREBASE_AUTH);
+
+}
+
+void loop()
+{
+   
+  Firebase.setString("/imageCaptured/base64Image", Photo2Base64());
+   //startBot =      Firebase.getBool("/controls/rotate/status");
+   //BotMotorSense = Firebase.getBool("/controls/rotate/sense");
+   //diveBot=        Firebase.getBool("/controls/dive");
+   //Serial.println(Photo2Base64());
+   //Serial.println(startBot);
+   //Serial.println(BotMotorSense);
+   //Serial.println(diveBot);
+   //controls
+   //BotControls(startBot, BotMotorSense, diveBot); 
+   
+  //delay(10);
 }
