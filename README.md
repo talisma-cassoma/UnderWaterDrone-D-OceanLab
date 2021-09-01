@@ -1,4 +1,4 @@
-# intellCapBot 
+# intellCapBot🤖
 
 autors: 
 Talisma Manuel & Jeremias Bartolomeu<br>
