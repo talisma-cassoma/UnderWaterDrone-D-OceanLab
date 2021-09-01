@@ -1,9 +1,10 @@
 # intellCapBot 
 
 autors: 
-Talisma Manuel<br>
-Jeremias Bartolomeu<br>
-we use esp32 camera to catupe photos and Machine learning for analyse it 
+Talisma Manuel & Jeremias Bartolomeu<br>
+
+
+we use esp32 camera to catupe photos and Convolutional neural network for analyse it 
 
 intellcapBot is robot that works like a sumarine 
 our goal is to build a robot that dive into the sea, film and recognize marine species using convolutional neural networks
