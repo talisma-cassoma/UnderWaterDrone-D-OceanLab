@@ -1,6 +1,8 @@
 # intellCapBot 
 
-this is part of a projet for Intellcap made by me and my classmate Jeremias<br>
+autors: 
+Talisma Manuel<br>
+Jeremias Bartolomeu<br>
 we use esp32 camera to catupe photos and Machine learning for analyse it 
 
 intellcapBot is robot that works like a sumarine 
