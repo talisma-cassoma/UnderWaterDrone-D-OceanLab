@@ -1,6 +1,6 @@
 # intellCapBot🤖
 
-autors: 
+authors: 
 Talisma Manuel & Jeremias Bartolomeu<br>
 
 
