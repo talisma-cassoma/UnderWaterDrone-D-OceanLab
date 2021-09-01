@@ -8,8 +8,8 @@ we use esp32 camera to catupe photos and Machine learning for analyse it
 intellcapBot is robot that works like a sumarine 
 our goal is to build a robot that dive into the sea, film and recognize marine species using convolutional neural networks
 
-this is how to get a firebase collection and extrat docs values 
-```js
+this is how to get a firebase collection and extrat docs values in arduino
+```cpp
    JsonObject& sensors = Firebase.get("/sensors");
    int pressure = sensors[String("pressure")].as<int>();
    String temp  = sensors[String("temperature")].as<String>();
