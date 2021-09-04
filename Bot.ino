@@ -13,15 +13,14 @@ IBIN TOFAIL UNIVERSITY - KENITRA
 #define WIFI_PASSWORD "*************"          
 #define FIREBASE_HOST "*************"      
 #define FIREBASE_AUTH "*************"   
+
+
+
 #define IN1_PIN 12 //dc motors pin controls
 #define IN2_PIN 13
 #define IN3_PIN 14 //electric cylinder pin controls
 #define IN4_PIN 15
-
-bool startBot = false;
-bool BotMotorSense= false;
-bool diveBot = false;
-
+ 
 #include "esp_camera.h"
 
 // WARNING!!! Make sure that you have either selected ESP32 Wrover Module,
@@ -102,29 +101,6 @@ String urlencode(String str)
     }
     return encodedString;
 }
-void BotControls(bool start, bool MotorSense, bool dive){
-if(start){//put it On   
-  if(dive){// SET DIVE 
-      digitalWrite(IN1_PIN, LOW);
-      digitalWrite(IN2_PIN, HIGH);
-    }
-    else{
-      digitalWrite(IN1_PIN, HIGH);
-      digitalWrite(IN2_PIN, LOW);
-      }
-     if(MotorSense){//CLOCKISE ROTATION
-      digitalWrite(IN3_PIN, LOW);
-      digitalWrite(IN4_PIN, HIGH);
-    }
-    else{
-      digitalWrite(IN3_PIN, HIGH);
-      digitalWrite(IN4_PIN, LOW);
-      }
-  }else{//put it off
-    digitalWrite(IN1_PIN, LOW);
-    digitalWrite(IN2_PIN, LOW);
-    }
-}
 
 void setup()
 {
@@ -161,12 +137,13 @@ pinMode(IN4_PIN, OUTPUT);
   config.pixel_format = PIXFORMAT_JPEG;
   //init with high specs to pre-allocate larger buffers
   if(psramFound()){
-    config.frame_size = FRAMESIZE_QVGA;
+    config.frame_size = FRAMESIZE_QQVGA;
     config.jpeg_quality = 8;  //0-63 lower number means higher quality
     config.fb_count = 2;
   } else {
-    config.frame_size = FRAMESIZE_QVGA;
-    config.jpeg_quality = 10;  //0-63 lower number means higher quality
+    config.frame_size = FRAMESIZE_QQVGA;/*(Quarter Quarter VGA) A screen resolution of 160x120 pixels, 
+    which is one fourth the total number of pixels in the QVGA standard (320x240)*/
+    config.jpeg_quality = 8;  //0-63 lower number means higher quality
     config.fb_count = 1;
   }
   
@@ -196,22 +173,49 @@ pinMode(IN4_PIN, OUTPUT);
   Serial.println();
 
   Firebase.begin(FIREBASE_HOST, FIREBASE_AUTH);
-
+  Firebase.stream("/ controls", [](FirebaseStream stream) {
+    String eventType = stream.getEvent();
+    eventType.toLowerCase();
+     
+    //Serial.print("event: ");
+    //Serial.println(eventType);
+   
+   if (eventType == "put") {
+      
+      String path = stream.getPath();
+      Serial.print("Path: ");
+      Serial.println(path);
+    
+      String  command = stream.getDataString();
+      Serial.print("command: ");
+      Serial.println(command);
+     
+      if(path == "/dive"){//dive button on/off 
+           if(command =="ON"){
+              digitalWrite(IN3_PIN, LOW);
+              digitalWrite(IN4_PIN, HIGH);
+              }
+          else if(command =="OFF"){
+              digitalWrite(IN3_PIN, HIGH);
+              digitalWrite(IN4_PIN, LOW);
+            }
+         }
+ 
+       else if(path == "/rotate"){//rotatate clockwise/unclockwise
+          if(command =="clockwise"){
+              digitalWrite(IN1_PIN, LOW);
+              digitalWrite(IN2_PIN, HIGH);
+          }
+          else if(command =="unclockwise"){
+              digitalWrite(IN1_PIN, HIGH);
+              digitalWrite(IN2_PIN, LOW);
+          }
+        }
+   }
+  });
 }
-
+ 
 void loop()
 {
-   
-  Firebase.setString("/imageCaptured/base64Image", Photo2Base64());
-   //startBot =      Firebase.getBool("/controls/rotate/status");
-   //BotMotorSense = Firebase.getBool("/controls/rotate/sense");
-   //diveBot=        Firebase.getBool("/controls/dive");
-   //Serial.println(Photo2Base64());
-   //Serial.println(startBot);
-   //Serial.println(BotMotorSense);
-   //Serial.println(diveBot);
-   //controls
-   //BotControls(startBot, BotMotorSense, diveBot); 
-   
-  //delay(10);
+   Firebase.setString("/imageCaptured/base64Image", Photo2Base64());
 }
