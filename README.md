@@ -15,7 +15,7 @@ this is how to get a firebase collection and extrat docs values in arduino
 
 ```cpp
 //#include <IOXhop_FirebaseESP32.h>
-   Firebase.stream("/ controls", [](FirebaseStream stream) {
+   Firebase.stream("/controls", [](FirebaseStream stream) {
     String eventType = stream.getEvent();
     eventType.toLowerCase();
      
