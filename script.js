@@ -1,3 +1,4 @@
+const apikey= 'n4pfryYGKDO6f7EaBjLd';
 const map = new mapboxgl.Map({
     container: 'map',
     style: 'https://assets.vector.hereapi.com/styles/berlin/base/mapbox/tilezen?apikey=' + apikey,
