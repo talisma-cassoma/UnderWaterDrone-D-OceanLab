@@ -15,7 +15,7 @@ this is how to get a firebase collection and extrat docs values in arduino
 
 ```cpp
 //#include <IOXhop_FirebaseESP32.h>
-   Firebase.stream("/controls", [](FirebaseStream stream) {
+Firebase.stream("/ controls", [](FirebaseStream stream) {
     String eventType = stream.getEvent();
     eventType.toLowerCase();
      
@@ -32,27 +32,25 @@ this is how to get a firebase collection and extrat docs values in arduino
       Serial.print("command: ");
       Serial.println(command);
      
-      if(path == "/dive"){//dive button on/off 
-           if(command =="ON"){
-              digitalWrite(IN3_PIN, LOW);
-              digitalWrite(IN4_PIN, HIGH);
-              }
-          else if(command =="OFF"){
-              digitalWrite(IN3_PIN, HIGH);
-              digitalWrite(IN4_PIN, LOW);
-            }
-         }
- 
-       else if(path == "/rotate"){//rotatate clockwise/unclockwise
-          if(command =="clockwise"){
-              digitalWrite(IN1_PIN, LOW);
-              digitalWrite(IN2_PIN, HIGH);
+        
+       if(path == "/angle"){//controls rudder angle 
+          if(command.toInt() <=180){
+            rudder_angle.write(command.toInt());
           }
           else if(command =="unclockwise"){
               digitalWrite(IN1_PIN, HIGH);
               digitalWrite(IN2_PIN, LOW);
           }
         }
+       else if(path == "/rotate"){//rotatate clockwise/unclockwise
+          if(command =="clockwise"){
+              digitalWrite(IN1_PIN, LOW);
+              digitalWrite(IN2_PIN, HIGH);
+          }
+        else if(command =="unclockwise"){
+              digitalWrite(IN1_PIN, HIGH);
+              digitalWrite(IN2_PIN, LOW);
+          }
    }
   });
 ```
