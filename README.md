@@ -37,7 +37,7 @@ Firebase.stream("/ controls", [](FirebaseStream stream) {
           if(command.toInt() <=180){
             rudder_angle.write(command.toInt());
           }
-          else if(command =="unclockwise"){
+       else if(command =="unclockwise"){
               digitalWrite(IN1_PIN, HIGH);
               digitalWrite(IN2_PIN, LOW);
           }
