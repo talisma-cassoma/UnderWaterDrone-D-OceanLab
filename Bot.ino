@@ -15,11 +15,18 @@ IBIN TOFAIL UNIVERSITY - KENITRA
 #define FIREBASE_AUTH "*************"   
 
 
-
 #define IN1_PIN 12 //dc motors pin controls
 #define IN2_PIN 13
-#define IN3_PIN 14 //electric cylinder pin controls
-#define IN4_PIN 15
+//#define IN3_PIN 14 //electric cylinder pin controls
+//#define IN4_PIN 15
+
+#define SERVO_1 14
+
+Servo servoN1;
+Servo servoN2;
+Servo servo1;
+
+int angleDegree = 0; 
  
 #include "esp_camera.h"
 
@@ -104,15 +111,24 @@ String urlencode(String str)
 
 void setup()
 {
-  WRITE_PERI_REG(RTC_CNTL_BROWN_OUT_REG, 0);
+  WRITE_PERI_REG(RTC_CNTL_BROWN_OUT_REG, 0); //disable brownout detector
   
+  servo1.setPeriodHertz(50);    // standard 50 hz servo
+  
+  servoN1.attach(2, 1000, 2000);
+  servoN2.attach(13, 1000, 2000);
+  
+  servo1.attach(SERVO_1, 1000, 2000);
+  
+  servo1.write(angleDegree);
+
   Serial.begin(115200);
   delay(10);
 
 pinMode(IN1_PIN, OUTPUT);
 pinMode(IN2_PIN, OUTPUT);
-pinMode(IN3_PIN, OUTPUT);
-pinMode(IN4_PIN, OUTPUT);
+//pinMode(IN3_PIN, OUTPUT);
+//pinMode(IN4_PIN, OUTPUT);
 
   camera_config_t config;
   config.ledc_channel = LEDC_CHANNEL_0;
@@ -173,7 +189,7 @@ pinMode(IN4_PIN, OUTPUT);
   Serial.println();
 
   Firebase.begin(FIREBASE_HOST, FIREBASE_AUTH);
-  Firebase.stream("/ controls", [](FirebaseStream stream) {
+  Firebase.stream("/controls", [](FirebaseStream stream) {
     String eventType = stream.getEvent();
     eventType.toLowerCase();
      
@@ -185,12 +201,33 @@ pinMode(IN4_PIN, OUTPUT);
       String path = stream.getPath();
       Serial.print("Path: ");
       Serial.println(path);
-    
-      String  command = stream.getDataString();
-      Serial.print("command: ");
-      Serial.println(command);
-     
-      if(path == "/dive"){//dive button on/off 
+       
+       if(path == "/"){//controls rudder angle 
+       JsonObject&  readCommand = stream.getData();
+        angleDegree = readCommand["angle"].as<int>();
+        Serial.print("angle: ");
+        Serial.println(angleDegree);
+          if(angleDegree<=180){
+            servo1.write(angleDegree);
+          }
+        }
+        else if(path == "/rotation"){//rotatate clockwise/unclockwise
+           String  readCommand = stream.getDataString();
+           
+          if(readCommand =="clockwise"){
+              digitalWrite(IN1_PIN, LOW);
+              digitalWrite(IN2_PIN, HIGH);
+          }
+        else if(readCommand =="unclockwise"){
+              digitalWrite(IN1_PIN, HIGH);
+              digitalWrite(IN2_PIN, LOW);
+          }
+        else if(readCommand =="OFF"){
+              digitalWrite(IN1_PIN, LOW);
+              digitalWrite(IN2_PIN, LOW);
+          }
+        }
+      else if(path == "/dive"){//dive button on/off 
            if(command =="ON"){
               digitalWrite(IN3_PIN, LOW);
               digitalWrite(IN4_PIN, HIGH);
@@ -199,18 +236,7 @@ pinMode(IN4_PIN, OUTPUT);
               digitalWrite(IN3_PIN, HIGH);
               digitalWrite(IN4_PIN, LOW);
             }
-         }
- 
-       else if(path == "/rotate"){//rotatate clockwise/unclockwise
-          if(command =="clockwise"){
-              digitalWrite(IN1_PIN, LOW);
-              digitalWrite(IN2_PIN, HIGH);
-          }
-          else if(command =="unclockwise"){
-              digitalWrite(IN1_PIN, HIGH);
-              digitalWrite(IN2_PIN, LOW);
-          }
-        }
+         }*/
    }
   });
 }
