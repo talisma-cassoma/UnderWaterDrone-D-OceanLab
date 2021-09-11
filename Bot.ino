@@ -227,12 +227,13 @@ pinMode(IN2_PIN, OUTPUT);
               digitalWrite(IN2_PIN, LOW);
           }
         }
-      else if(path == "/dive"){//dive button on/off 
-           if(command =="ON"){
+       else if(path == "/dive"){//dive button on/off 
+         String  readCommand = stream.getDataString();
+           if(readCommand =="ON"){
               digitalWrite(IN3_PIN, LOW);
               digitalWrite(IN4_PIN, HIGH);
               }
-          else if(command =="OFF"){
+          else if(readCommand =="OFF"){
               digitalWrite(IN3_PIN, HIGH);
               digitalWrite(IN4_PIN, LOW);
             }
