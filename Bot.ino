@@ -14,7 +14,6 @@ IBIN TOFAIL UNIVERSITY - KENITRA
 #define FIREBASE_HOST "*************"      
 #define FIREBASE_AUTH "*************"   
 
-
 #define IN1_PIN 12 //dc motors pin controls
 #define IN2_PIN 13
 //#define IN3_PIN 14 //electric cylinder pin controls
@@ -192,53 +191,58 @@ pinMode(IN2_PIN, OUTPUT);
   Firebase.stream("/controls", [](FirebaseStream stream) {
     String eventType = stream.getEvent();
     eventType.toLowerCase();
-     
-    //Serial.print("event: ");
-    //Serial.println(eventType);
-   
-   if (eventType == "put") {
-      
+    
+    Serial.print("event: ");
+    Serial.println(eventType);
+    
+    
+    if(eventType == "patch"){
       String path = stream.getPath();
       Serial.print("Path: ");
       Serial.println(path);
-       
-       if(path == "/"){//controls rudder angle 
-       JsonObject&  readCommand = stream.getData();
-        angleDegree = readCommand["angle"].as<int>();
-        Serial.print("angle: ");
-        Serial.println(angleDegree);
-          if(angleDegree<=180){
-            servo1.write(angleDegree);
+      
+      JsonObject&  readCommand = stream.getData();
+    
+        if(readCommand.containsKey("angle")){//controls rudder angle 
+           angleDegree = readCommand["angle"].as<int>();
+           servo1.write(angleDegree);
+           Serial.print("angulo: ");
+           Serial.println(angleDegree);
           }
-        }
-        else if(path == "/rotation"){//rotatate clockwise/unclockwise
-           String  readCommand = stream.getDataString();
-           
-          if(readCommand =="clockwise"){
+        else if(readCommand.containsKey("rotation")){//rotatate clockwise/unclockwise
+         
+          String rotation = readCommand["rotation"].as<String>();
+           Serial.print("rotation: ");
+           Serial.println(rotation);
+          
+          if(rotation =="clockwise"){
               digitalWrite(IN1_PIN, LOW);
               digitalWrite(IN2_PIN, HIGH);
           }
-        else if(readCommand =="unclockwise"){
+        else if(rotation =="unclockwise"){
               digitalWrite(IN1_PIN, HIGH);
               digitalWrite(IN2_PIN, LOW);
           }
-        else if(readCommand =="OFF"){
+        else if(rotation =="off"){
               digitalWrite(IN1_PIN, LOW);
               digitalWrite(IN2_PIN, LOW);
           }
         }
-       else if(path == "/dive"){//dive button on/off 
-         String  readCommand = stream.getDataString();
-           if(readCommand =="ON"){
+      else if(readCommand.containsKey("dive")){//dive button on/off 
+         
+          String dive = readCommand["dive"].as<String>();
+           Serial.print("dive Bot: ");
+           Serial.println(dive);
+           /*if(readCommand =="ON"){
               digitalWrite(IN3_PIN, LOW);
               digitalWrite(IN4_PIN, HIGH);
               }
           else if(readCommand =="OFF"){
-              digitalWrite(IN3_PIN, HIGH);
+              digitalWrite(IN3_PIN, lOW);
               digitalWrite(IN4_PIN, LOW);
-            }
-         }*/
-   }
+           }*/ 
+         }
+      }
   });
 }
  
