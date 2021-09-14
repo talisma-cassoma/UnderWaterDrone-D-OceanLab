@@ -13,16 +13,20 @@ IBIN TOFAIL UNIVERSITY - KENITRA
 #define WIFI_PASSWORD "*************"          
 #define FIREBASE_HOST "*************"      
 #define FIREBASE_AUTH "*************"   
+
 #define IN1_PIN 12 //dc motors pin controls
 #define IN2_PIN 13
-#define IN3_PIN 14 //electric cylinder pin controls
-#define IN4_PIN 15
+//#define IN3_PIN 14 //electric cylinder pin controls
+//#define IN4_PIN 15
 
-bool startBot = false;
-bool BotMotorSense= false;
-bool diveBot = false;
+#define SERVO_1 14
 
+Servo servoN1;
+Servo servoN2;
+Servo servo1;
 
+int angleDegree = 0; 
+ 
 #include "esp_camera.h"
 
 // WARNING!!! Make sure that you have either selected ESP32 Wrover Module,
@@ -47,96 +51,6 @@ bool diveBot = false;
 #define HREF_GPIO_NUM     23
 #define PCLK_GPIO_NUM     22
 
-void setup()
-{
-  WRITE_PERI_REG(RTC_CNTL_BROWN_OUT_REG, 0);
-  
-  Serial.begin(115200);
-  delay(10);
-
-pinMode(IN1_PIN, OUTPUT);
-pinMode(IN2_PIN, OUTPUT);
-pinMode(IN3_PIN, OUTPUT);
-pinMode(IN4_PIN, OUTPUT);
-
-  camera_config_t config;
-  config.ledc_channel = LEDC_CHANNEL_0;
-  config.ledc_timer = LEDC_TIMER_0;
-  config.pin_d0 = Y2_GPIO_NUM;
-  config.pin_d1 = Y3_GPIO_NUM;
-  config.pin_d2 = Y4_GPIO_NUM;
-  config.pin_d3 = Y5_GPIO_NUM;
-  config.pin_d4 = Y6_GPIO_NUM;
-  config.pin_d5 = Y7_GPIO_NUM;
-  config.pin_d6 = Y8_GPIO_NUM;
-  config.pin_d7 = Y9_GPIO_NUM;
-  config.pin_xclk = XCLK_GPIO_NUM;
-  config.pin_pclk = PCLK_GPIO_NUM;
-  config.pin_vsync = VSYNC_GPIO_NUM;
-  config.pin_href = HREF_GPIO_NUM;
-  config.pin_sscb_sda = SIOD_GPIO_NUM;
-  config.pin_sscb_scl = SIOC_GPIO_NUM;
-  config.pin_pwdn = PWDN_GPIO_NUM;
-  config.pin_reset = RESET_GPIO_NUM;
-  config.xclk_freq_hz = 20000000;
-  config.pixel_format = PIXFORMAT_JPEG;
-  //init with high specs to pre-allocate larger buffers
-  if(psramFound()){
-    config.frame_size = FRAMESIZE_UXGA;
-    config.jpeg_quality = 10;  //0-63 lower number means higher quality
-    config.fb_count = 2;
-  } else {
-    config.frame_size = FRAMESIZE_SVGA;
-    config.jpeg_quality = 12;  //0-63 lower number means higher quality
-    config.fb_count = 1;
-  }
-  
-  // camera init
-  esp_err_t err = esp_camera_init(&config);
-  if (err != ESP_OK) {
-    Serial.printf("Camera init failed with error 0x%x", err);
-    delay(1000);
-    ESP.restart();
-  }
-
-  //drop down frame size for higher initial frame rate
-  sensor_t * s = esp_camera_sensor_get();
-  s->set_framesize(s, FRAMESIZE_QQVGA);  // UXGA|SXGA|XGA|SVGA|VGA|CIF|QVGA|HQVGA|QQVGA
-
-  //WIFI
-  WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
-  
-  Serial.print("Conectando ao wifi");
-  
-  while (WiFi.status() != WL_CONNECTED)
-  {
-    Serial.print(".");
-    delay(300);
-  }
-  
-  Serial.println();
-
-  Firebase.begin(FIREBASE_HOST, FIREBASE_AUTH);
-
-}
-
-void loop()
-{
-   String photo = Photo2Base64();
-   Firebase.setString("/imageCaptured/base64Image", photo);
-   
-   startBot =      Firebase.getBool("/controls/rotate/status");
-   BotMotorSense = Firebase.getBool("/controls/rotate/sense");
-   diveBot=        Firebase.getBool("/controls/dive");
-   Serial.println(photo);
-   Serial.println(startBot);
-   Serial.println(BotMotorSense);
-   Serial.println(diveBot);
-   //controls
-   BotControls(startBot, BotMotorSense, diveBot); 
-   
-  delay(50);
-}
 
 String Photo2Base64(){
     camera_fb_t * fb = NULL;
@@ -193,26 +107,146 @@ String urlencode(String str)
     }
     return encodedString;
 }
-void BotControls(bool start, bool MotorSense, bool dive){
-if(start){//put it On   
-  if(dive){// SET DIVE 
-      digitalWrite(IN1_PIN, LOW);
-      digitalWrite(IN2_PIN, HIGH);
-    }
-    else{
-      digitalWrite(IN1_PIN, HIGH);
-      digitalWrite(IN2_PIN, LOW);
+
+void setup()
+{
+  WRITE_PERI_REG(RTC_CNTL_BROWN_OUT_REG, 0); //disable brownout detector
+  
+  servo1.setPeriodHertz(50);    // standard 50 hz servo
+  
+  servoN1.attach(2, 1000, 2000);
+  servoN2.attach(13, 1000, 2000);
+  
+  servo1.attach(SERVO_1, 1000, 2000);
+  
+  servo1.write(angleDegree);
+
+  Serial.begin(115200);
+  delay(10);
+
+pinMode(IN1_PIN, OUTPUT);
+pinMode(IN2_PIN, OUTPUT);
+//pinMode(IN3_PIN, OUTPUT);
+//pinMode(IN4_PIN, OUTPUT);
+
+  camera_config_t config;
+  config.ledc_channel = LEDC_CHANNEL_0;
+  config.ledc_timer = LEDC_TIMER_0;
+  config.pin_d0 = Y2_GPIO_NUM;
+  config.pin_d1 = Y3_GPIO_NUM;
+  config.pin_d2 = Y4_GPIO_NUM;
+  config.pin_d3 = Y5_GPIO_NUM;
+  config.pin_d4 = Y6_GPIO_NUM;
+  config.pin_d5 = Y7_GPIO_NUM;
+  config.pin_d6 = Y8_GPIO_NUM;
+  config.pin_d7 = Y9_GPIO_NUM;
+  config.pin_xclk = XCLK_GPIO_NUM;
+  config.pin_pclk = PCLK_GPIO_NUM;
+  config.pin_vsync = VSYNC_GPIO_NUM;
+  config.pin_href = HREF_GPIO_NUM;
+  config.pin_sscb_sda = SIOD_GPIO_NUM;
+  config.pin_sscb_scl = SIOC_GPIO_NUM;
+  config.pin_pwdn = PWDN_GPIO_NUM;
+  config.pin_reset = RESET_GPIO_NUM;
+  config.xclk_freq_hz = 20000000;
+  config.pixel_format = PIXFORMAT_JPEG;
+  //init with high specs to pre-allocate larger buffers
+  if(psramFound()){
+    config.frame_size = FRAMESIZE_QQVGA;
+    config.jpeg_quality = 8;  //0-63 lower number means higher quality
+    config.fb_count = 2;
+  } else {
+    config.frame_size = FRAMESIZE_QQVGA;/*(Quarter Quarter VGA) A screen resolution of 160x120 pixels, 
+    which is one fourth the total number of pixels in the QVGA standard (320x240)*/
+    config.jpeg_quality = 8;  //0-63 lower number means higher quality
+    config.fb_count = 1;
+  }
+  
+  // camera init
+  esp_err_t err = esp_camera_init(&config);
+  if (err != ESP_OK) {
+    Serial.printf("Camera init failed with error 0x%x", err);
+    delay(1000);
+    ESP.restart();
+  }
+
+  //drop down frame size for higher initial frame rate
+  sensor_t * s = esp_camera_sensor_get();
+  s->set_framesize(s, FRAMESIZE_QQVGA);  // UXGA|SXGA|XGA|SVGA|VGA|CIF|QVGA|HQVGA|QQVGA
+
+  //WIFI
+  WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
+  
+  Serial.print("Conectando ao wifi");
+  
+  while (WiFi.status() != WL_CONNECTED)
+  {
+    Serial.print(".");
+    delay(100);
+  }
+  
+  Serial.println();
+
+  Firebase.begin(FIREBASE_HOST, FIREBASE_AUTH);
+  Firebase.stream("/controls", [](FirebaseStream stream) {
+    String eventType = stream.getEvent();
+    eventType.toLowerCase();
+    
+    Serial.print("event: ");
+    Serial.println(eventType);
+    
+    
+    if(eventType == "patch"){
+      String path = stream.getPath();
+      Serial.print("Path: ");
+      Serial.println(path);
+      
+      JsonObject&  readCommand = stream.getData();
+    
+        if(readCommand.containsKey("angle")){//controls rudder angle 
+           angleDegree = readCommand["angle"].as<int>();
+           servo1.write(angleDegree);
+           Serial.print("angulo: ");
+           Serial.println(angleDegree);
+          }
+        else if(readCommand.containsKey("rotation")){//rotatate clockwise/unclockwise
+         
+          String rotation = readCommand["rotation"].as<String>();
+           Serial.print("rotation: ");
+           Serial.println(rotation);
+          
+          if(rotation =="clockwise"){
+              digitalWrite(IN1_PIN, LOW);
+              digitalWrite(IN2_PIN, HIGH);
+          }
+        else if(rotation =="unclockwise"){
+              digitalWrite(IN1_PIN, HIGH);
+              digitalWrite(IN2_PIN, LOW);
+          }
+        else if(rotation =="off"){
+              digitalWrite(IN1_PIN, LOW);
+              digitalWrite(IN2_PIN, LOW);
+          }
+        }
+      else if(readCommand.containsKey("dive")){//dive button on/off 
+         
+          String dive = readCommand["dive"].as<String>();
+           Serial.print("dive Bot: ");
+           Serial.println(dive);
+           /*if(readCommand =="ON"){
+              digitalWrite(IN3_PIN, LOW);
+              digitalWrite(IN4_PIN, HIGH);
+              }
+          else if(readCommand =="OFF"){
+              digitalWrite(IN3_PIN, lOW);
+              digitalWrite(IN4_PIN, LOW);
+           }*/ 
+         }
       }
-     if(MotorSense){//CLOCKISE ROTATION
-      digitalWrite(IN3_PIN, LOW);
-      digitalWrite(IN4_PIN, HIGH);
-    }
-    else{
-      digitalWrite(IN3_PIN, HIGH);
-      digitalWrite(IN4_PIN, LOW);
-      }
-  }else{//put it off
-    digitalWrite(IN1_PIN, LOW);
-    digitalWrite(IN2_PIN, LOW);
-    }
+  });
+}
+ 
+void loop()
+{
+   Firebase.setString("/imageCaptured/base64Image", Photo2Base64());
 }
