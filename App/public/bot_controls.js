@@ -3,7 +3,7 @@ const joystick = nipplejs.create({
     zone: document.getElementById('joystick'),
     mode: 'static',
     position: {right: '180px', bottom: '180px'},
-    color: 'black'
+    color: 'red'
 });
 //get the joystick angle on mouve
 joystick.on('move', function (evt, data) {

@@ -23,7 +23,7 @@ justify-self: center;
 	height: 14rem;
 	z-index: 2;
 	padding: 1.5rem;
-	box-shadow: 1px 16px 20px #bbb;
+	box-shadow: 1px 1px 7px #333;
 	border-radius: 2%;
 	font-size: .6em;
 	color:#DBDFE1;
@@ -94,7 +94,8 @@ background: radial-gradient(circle, rgba(219,223,241,1) 0%, rgba(219,223,241,1) 
 	position: absolute;
 	border-radius: 50%;
 	background: #ffff;
-	box-shadow: 1px 3px 8px #bbb; 
+	box-shadow: 1px 1px 5px #bbb; 
+	z-index: 5;
 }
 .button.connect{
 	border: solid 4px #FFBA69;
