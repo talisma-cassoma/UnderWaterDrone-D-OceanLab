@@ -4,64 +4,64 @@ function mapsConfig(){
     const map = new mapboxgl.Map({
         container: 'map', // container ID
         style: 'mapbox://styles/mapbox/streets-v11',
-center: [-74.0066, 40.7135],
-zoom: 15.5,
-pitch: 45,
-bearing: -17.6,
-container: 'map',
-antialias: true
-});
+        center: [-73.9796, 40.7105],
+        zoom: 15.5,
+        pitch: 45,
+        bearing: -17.6,
+        container: 'map',
+        antialias: true
+    });
  
-map.on('load', () => {
-// Insert the layer beneath any symbol layer.
-const layers = map.getStyle().layers;
-const labelLayerId = layers.find(
-(layer) => layer.type === 'symbol' && layer.layout['text-field']
-).id;
+    map.on('load', () => {
+        // Insert the layer beneath any symbol layer.
+        const layers = map.getStyle().layers;
+        const labelLayerId = layers.find(
+        (layer) => layer.type === 'symbol' && layer.layout['text-field']
+        ).id;
  
-// The 'building' layer in the Mapbox Streets
-// vector tileset contains building height data
-// from OpenStreetMap.
-map.addLayer(
-{
-'id': 'add-3d-buildings',
-'source': 'composite',
-'source-layer': 'building',
-'filter': ['==', 'extrude', 'true'],
-'type': 'fill-extrusion',
-'minzoom': 15,
-'paint': {
-'fill-extrusion-color': '#aaa',
+    // The 'building' layer in the Mapbox Streets
+    // vector tileset contains building height data
+    // from OpenStreetMap.
+    map.addLayer(
+    {
+        'id': 'add-3d-buildings',
+        'source': 'composite',
+        'source-layer': 'building',
+        'filter': ['==', 'extrude', 'true'],
+        'type': 'fill-extrusion',
+        'minzoom': 15,
+        'paint': {
+        'fill-extrusion-color': '#aaa',
  
-// Use an 'interpolate' expression to
-// add a smooth transition effect to
-// the buildings as the user zooms in.
-'fill-extrusion-height': [
-'interpolate',
-['linear'],
-['zoom'],
-15,
-0,
-15.05,
-['get', 'height']
-],
-'fill-extrusion-base': [
-'interpolate',
-['linear'],
-['zoom'],
-15,
-0,
-15.05,
-['get', 'min_height']
-],
-'fill-extrusion-opacity': 0.6
-}
-},
-labelLayerId
-);
-});
-    // Add zoom and rotation controls to the map.
-    map.addControl(new mapboxgl.NavigationControl());
+        // Use an 'interpolate' expression to
+        // add a smooth transition effect to
+        // the buildings as the user zooms in.
+        'fill-extrusion-height': [
+        'interpolate',
+        ['linear'],
+        ['zoom'],
+        15,
+        0,
+        15.05,
+        ['get', 'height']
+        ],
+        'fill-extrusion-base': [
+        'interpolate',
+        ['linear'],
+        [       'zoom'],
+        15,
+        0,
+        15.05,
+        ['get', 'min_height']
+        ],
+        'fill-extrusion-opacity': 0.6
+        }
+        },
+        labelLayerId
+        );
+        });
+            // Add zoom and rotation controls to the map.
+           map.addControl(new mapboxgl.NavigationControl());
 }
 
 //turn DOM elemets dragble
@@ -121,8 +121,8 @@ socket.on('sendingData', data=>{
 
     streamingvideo.src=`${data.imageCaptured.base64Image}`
     document.querySelector(".ph").innerHTML=  `${data.sensors.ph}`
-    document.querySelector(".pressure").innerHTML=  `${data.sensors.pressure}`
-    document.querySelector(".temperature").innerHTML=   `${data.sensors.temperature}`
+    document.querySelector(".pressure").innerHTML=  `${data.sensors.pressure}Pa`
+    document.querySelector(".temperature").innerHTML=   `${data.sensors.temperature}°C`
     document.querySelector(".specieIdentified").innerHTML=  `${data.analyzedImage.especieFound}`
    // console.log(data)
 })

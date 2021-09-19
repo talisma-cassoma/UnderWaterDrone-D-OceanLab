@@ -5,9 +5,11 @@ for (let i = 0; i < 20; i++) {
     theData.push(((Math.random()<=0.5)? -1 : 1)*Math.random())
     theLabels.push(i)
 }
-    
-var ctx = document.getElementById('myChart').getContext('2d');
-var myChart = new Chart(ctx, {
+const chart=  document.getElementById('myChart')
+var ctx = chart.getContext('2d');
+chart.width = 171
+chart.height = 80
+var Chart = new Chart(ctx, {
     type: 'line',
     data: {
         labels: theLabels,
@@ -27,7 +29,7 @@ var myChart = new Chart(ctx, {
         }]
     },
     options: {
-        responsive: true,
+        //responsive: true,
         scales: {
             y: {
                 display: false,

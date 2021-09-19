@@ -13,36 +13,43 @@
 <body>
 		<div id="map"></div>
 		<div id="joystick"></div>
-		<div class="moving_box" id="Statiscs">
-			<h2>Statiscs</h2>
-			<div id="floating-bars-chart">
+		<aside>
+			<div class="info_box" id="Statiscs">
+				<h2>Statiscs</h2>
+				<div id="floating-bars-chart">
 				<canvas id="myChart" width="190" height="100"></canvas>
-			</div
-			<ul>
-					<li>Battery<P> 90%</P></li>
-					<li>Ph <P class="ph"> 7</P></li>
-					<li>Pressure<P class="pressure"> 5Ba</P></li>
-					<li>Temperature<P class="temperature"> 22°c</P></li>
+				</div>
+				<ul >
+					<li>Battery</li>
+					<li class="value"> 80%</li>
+					<li>Ph</li>
+					<li class="value ph">7</li>
+					<li>Pressure</li>
+					<li class="value pressure"> 5Ba</li>
+					<li>Temperature</li>
+					<li class="value temperature"> 22°c</li>
+				</ul>
+			</div>
+			<ul class="info_box" id="analysis">
+				<li>Species 
+					<br> identified:
+				<p class="value specieIdentified">CARAPAU</p></li>
+				<li>Quantity:
+					<p class="value">7</p></li>
+				<li>Latitude:
+					<p class="value">3600000</p></li>
+				<li>Longetude:
+					<p class="value">620000</p></li>
 			</ul>
-		</div>
-		<div class="moving_box" id="analysis">
-          Species <br> identified:
-					<p class="specieIdentified">CARAPAU</p>
-					Quantity:
-          <p>7</p>
-					Latitude:
-          <p>3600000</p>
-					Longetude:
-          <p>620000</p>
-		</div>
+		</aside>
 		<div id="controls">
-			<svg version="1.1" id="dashed-circle" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+			<!--svg version="1.1" id="dashed-circle" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
 	 		width="200px" height="200px" viewBox="0 0 165 165" enable-background="new 0 0 165 165" xml:space="preserve">
 			<g>
 	
   		<circle fill="none" stroke="#DBDFF1" stroke-width="16" stroke-miterlimit="23" stroke-dasharray="1.048,6.0288" cx="82.453" cy="82.563" r="75"/>
 			</g>
-		</svg>
+		</svg-->
 			<button class="button connect">OFF</button>
 			<button class="button dive">DIVE</button>
 			<button class="button rotate">ROTATE</button>
