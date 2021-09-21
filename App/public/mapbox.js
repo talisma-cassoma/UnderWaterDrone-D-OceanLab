@@ -62,6 +62,14 @@ function mapsConfig(){
         });
             // Add zoom and rotation controls to the map.
            map.addControl(new mapboxgl.NavigationControl());
+           // Create a new marker.
+            const marker = new mapboxgl.Marker({
+                    color: "#FFBA69",
+                    draggable: true
+                    })
+            .setLngLat([-73.9796, 40.7100])
+            .setPopup(new mapboxgl.Popup().setHTML("<p>salut <br>c'est moi,<br> drone</p>")) // add popup
+            .addTo(map);
 }
 
 //turn DOM elemets dragble

@@ -56,10 +56,9 @@ justify-self: center;
 	border: none;
 	font-size: .8em;
 	text-emphasis-style: none;
+	padding-bottom: 0.8em;
 }
-li::marker{
-	color: #74d474;
-}
+li::marker{color: #74d474;}
 #analysis{
 	background-color: #8676ff;
 	bottom: 11px;  left: 12px;
@@ -69,17 +68,15 @@ li::marker{
     border-bottom: solid #383874 .12em;
     margin-bottom: .6em;
 }
-#analysis .value{
+#analysis.value{
 	color: #ffff;
 	font-size: 1em;
 }
-#analysis > li:last-child{border-bottom: none;
-}
+#analysis > li:last-child{border-bottom: none;}
 #floating-bars-chart{
 	position: relative;
 	height: 8em;
 	width: 15em; 
-	/*margin-bottom: 2em;*/
 }
 #controls{
 	position: absolute;
