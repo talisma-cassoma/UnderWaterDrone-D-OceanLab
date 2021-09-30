@@ -1,0 +1,19 @@
+{
+  "name": "package",
+  "version": "1.0.0",
+  "description": "all depencies lays here",
+  "main": "server.js",
+  "scripts": {
+    "test": "npm start",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "ignoe"
+  },
+  "keywords": [
+    "ignore"
+  ],
+  "author": "talisma",
+  "license": "MIT"
+}

@@ -38,11 +38,13 @@ justify-self: center;
 	position: absolute;
 	top: 20px;
 	right: 100px;
-	border-radius: 2%;
-	width: 350px; height: 450px;
+	border-radius: 50%;
+	width: 350px; height: 350px;
 	z-index: 4;
 	background-color: #DBDFF1;
-}	
+	border: solid .2em orangered;
+}
+/*#stream:hover{width: 250px; height: 250px;}*/
 #Statiscs{
 	background-color: white;
 	grid-template-rows: 20% 50% 30%;

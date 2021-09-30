@@ -111,12 +111,12 @@ showMaps(mapsConfig()).then((res, rej)=>{
 let isfullscreen= false
 streamingvideo.addEventListener('dblclick', function rezire(){
     if(!isfullscreen){
-        this.style.width = "90vw"
-        this.style.height= "90vh"
+        this.style.width = "500px"
+        this.style.height= "500px"
         isfullscreen= true
     }else{
         this.style.width = "350px"
-        this.style.height= "450px" 
+        this.style.height= "350px" 
         isfullscreen= false
     }
 })

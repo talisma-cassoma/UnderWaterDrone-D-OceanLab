@@ -27,7 +27,8 @@ function setButtonFunction(event){ // set funtions for all buttons
         diveBot()
     }
     else if(buttonName=='button connect'){
-        connect__to_Bot()
+        const buttonLabel = connect__to_Bot()
+        event.currentTarget.innerHTML = buttonLabel
     }
 }
 //add click event to all buttons 
@@ -59,9 +60,12 @@ function connect__to_Bot(){
     if(!connection){
         socket.emit('setBot','connection' , 'on')
         connection= true
+        return 'OFF'
+
     }
     else{
         socket.emit('setBot','connection', 'off' )
         connection= false
+        return 'ON'
     }
 }
