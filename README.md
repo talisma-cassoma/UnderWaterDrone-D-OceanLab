@@ -23,3 +23,6 @@ this app use firebase as midleware for comunicate our robot to our server
 this is how the robot circuit look like <br/>
 we still increasing features to the projets so this circuit shall be more complete with time 
 <img src="images/bot_circuit.png" />
+
+we're using mask-RCNN for classifie marines species 
+<img src="images/identifiedSpecie.png" />
