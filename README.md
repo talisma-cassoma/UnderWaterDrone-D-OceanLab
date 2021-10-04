@@ -8,7 +8,7 @@ Talisma Manuel & Jeremias Bartolomeu<br>
 ## Functional description of needs:
  
 - [x] Integrates a camera and a wifi module on bot for remote control. 
-- [x] Dectect and recognise marine speicie from images stream. 
+- [x] Dectect and recognize marine speicies from images stream. 
 - [x] Create a simple and pleasant interface to control the device underwater.
 - [ ] Design an impermeable structure to protect the circuit on the water.
 
