@@ -42,7 +42,8 @@ justify-self: center;
 	width: 350px; height: 350px;
 	z-index: 4;
 	background-color: #DBDFF1;
-	border: solid .2em orangered;
+	border: solid .2em #FFBA69;
+	box-shadow: 1px 4px 5px #333; 
 }
 /*#stream:hover{width: 250px; height: 250px;}*/
 #Statiscs{
