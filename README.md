@@ -3,7 +3,8 @@
 
 authors: 
 Talisma Manuel & Jeremias Bartolomeu<br>
-
+v1.0
+this is a stable projet version that controls the bot with one dc mootor and a servo-motor 
 
 ## Functional description of needs:
  
