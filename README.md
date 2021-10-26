@@ -18,8 +18,7 @@ Our drone is controlled by WIFI signal, we capture the images through a camera i
 
 projet interface 
 
-<kbd><img src="App/public/images/interface.png" alt="projet interface" /></kbd> 
-
+<kbd><img src="App/public/images/interface.png" alt="projet interface" /></kbd>
 
 For this project we chose to use the ESP32 microcontroller, for purely financial reasons. Associated with an OV2640 camera (2MG pixels) able to transmit in WIFI and live a video stream, images. The ESP32 is also programmable using the Arduino IDE. The ESP32 is also programmable using the Arduino IDE.
 
