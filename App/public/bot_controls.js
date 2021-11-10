@@ -10,6 +10,12 @@ joystick.on('move', function (evt, data) {
     //console.log(parseInt(data.angle.degree)); // joystick angle ::NB: servo max speed is 1ms 
     socket.emit('setBot', 'rudder angle', parseInt(data.angle.degree))
 })
+//check for joystick activation and de-activation. (the user released the active zone)
+joystick.on('start end', function (evt, data) {
+    const joystickEvent = evt.type
+    console.log(typeof joystickEvent);
+    socket.emit('setBot', 'turn', joystickEvent)
+})
 
 //buttons functions 
 const controls_buttons= document.querySelectorAll('.button')//get all buttons
@@ -60,12 +66,12 @@ function connect__to_Bot(){
     if(!connection){
         socket.emit('setBot','connection' , 'on')
         connection= true
-        return 'OFF'
+        return 'ON'
 
     }
     else{
         socket.emit('setBot','connection', 'off' )
         connection= false
-        return 'ON'
+        return 'OFF'
     }
 }
