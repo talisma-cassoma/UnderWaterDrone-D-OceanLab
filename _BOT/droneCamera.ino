@@ -13,19 +13,6 @@ IBIN TOFAIL UNIVERSITY - KENITRA
 #define WIFI_PASSWORD "*************"          
 #define FIREBASE_HOST "*************"      
 #define FIREBASE_AUTH "*************"   
-
-#define IN1_PIN 12 //dc motors pin controls
-#define IN2_PIN 13
-//#define IN3_PIN 14 //electric cylinder pin controls
-//#define IN4_PIN 15
-
-#define SERVO_1 14
-
-Servo servoN1;
-Servo servoN2;
-Servo servo1;
-
-int angleDegree = 0; 
  
 #include "esp_camera.h"
 
@@ -111,15 +98,6 @@ String urlencode(String str)
 void setup()
 {
   WRITE_PERI_REG(RTC_CNTL_BROWN_OUT_REG, 0); //disable brownout detector
-  
-  servo1.setPeriodHertz(50);    // standard 50 hz servo
-  
-  servoN1.attach(2, 1000, 2000);
-  servoN2.attach(13, 1000, 2000);
-  
-  servo1.attach(SERVO_1, 1000, 2000);
-  
-  servo1.write(angleDegree);
 
   Serial.begin(115200);
   delay(10);
@@ -177,7 +155,7 @@ pinMode(IN2_PIN, OUTPUT);
   //WIFI
   WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
   
-  Serial.print("Conectando ao wifi");
+  Serial.print(":) Conectando ao wifi");
   
   while (WiFi.status() != WL_CONNECTED)
   {
@@ -186,64 +164,10 @@ pinMode(IN2_PIN, OUTPUT);
   }
   
   Serial.println();
-
+ 
+ //conectando ao firebase 
   Firebase.begin(FIREBASE_HOST, FIREBASE_AUTH);
-  Firebase.stream("/controls", [](FirebaseStream stream) {
-    String eventType = stream.getEvent();
-    eventType.toLowerCase();
-    
-    Serial.print("event: ");
-    Serial.println(eventType);
-    
-    
-    if(eventType == "patch"){
-      String path = stream.getPath();
-      Serial.print("Path: ");
-      Serial.println(path);
-      
-      JsonObject&  readCommand = stream.getData();
-    
-        if(readCommand.containsKey("angle")){//controls rudder angle 
-           angleDegree = readCommand["angle"].as<int>();
-           servo1.write(angleDegree);
-           Serial.print("angulo: ");
-           Serial.println(angleDegree);
-          }
-        else if(readCommand.containsKey("rotation")){//rotatate clockwise/unclockwise
-         
-          String rotation = readCommand["rotation"].as<String>();
-           Serial.print("rotation: ");
-           Serial.println(rotation);
-          
-          if(rotation =="clockwise"){
-              digitalWrite(IN1_PIN, LOW);
-              digitalWrite(IN2_PIN, HIGH);
-          }
-        else if(rotation =="unclockwise"){
-              digitalWrite(IN1_PIN, HIGH);
-              digitalWrite(IN2_PIN, LOW);
-          }
-        else if(rotation =="off"){
-              digitalWrite(IN1_PIN, LOW);
-              digitalWrite(IN2_PIN, LOW);
-          }
-        }
-      else if(readCommand.containsKey("dive")){//dive button on/off 
-         
-          String dive = readCommand["dive"].as<String>();
-           Serial.print("dive Bot: ");
-           Serial.println(dive);
-           /*if(readCommand =="ON"){
-              digitalWrite(IN3_PIN, LOW);
-              digitalWrite(IN4_PIN, HIGH);
-              }
-          else if(readCommand =="OFF"){
-              digitalWrite(IN3_PIN, lOW);
-              digitalWrite(IN4_PIN, LOW);
-           }*/ 
-         }
-      }
-  });
+
 }
  
 void loop()

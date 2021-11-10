@@ -15,11 +15,19 @@ var db = admin.database();
 //gravar dado de imagem no firebase
 let setBot = function (branch, value){
   let data={}
+  //console.log(value)
   if(branch=='rudder angle'){data = {angle: value}}
   else if(branch=='connection'){data = {connection: value}}
+  else if(branch=='turn'){
+    const joystickEvent = value
+    if(joystickEvent == "start"){ data = {turn: "on"}}
+    if(joystickEvent == "end"){data = {turn: "off"}}
+  }
   else if(branch=='dive'){data = {dive: value}}
   else if(branch=='rotation'){data = {rotation: value}}
 
+  //console.log(branch)
+  
   db.ref('/controls').update(data)
     }
     
