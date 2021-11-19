@@ -6,8 +6,8 @@
 #include <Servo.h>
 #include <DHT.h>   
 
-#define ssid "******************"     //"Ksar rouge"  //WiFi SSID: Orange-D656
-#define password "*********************" //"Angola2020"  //WiFi Password: 
+#define ssid "******************"     //
+#define password "*********************" //
 #define FIREBASE_HOST "****************" //Firebase Project URL Remove "https:" , "\" and "/"
 #define FIREBASE_AUTH "****************"          //Firebase Auth Token
 
