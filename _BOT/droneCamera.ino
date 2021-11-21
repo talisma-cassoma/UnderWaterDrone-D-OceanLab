@@ -1,6 +1,8 @@
 /*
 INTELLCAP_BOT
 IBIN TOFAIL UNIVERSITY - KENITRA
+
+ESP32-CAM AI THINKER 
 */
 #include <IOXhop_FirebaseESP32.h>  //funcionando com a versao 5.1.1 do <arduinoJson.h>   
 

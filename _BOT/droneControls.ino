@@ -1,15 +1,14 @@
-//Viral Science www.youtube.com/c/viralscience  www.viralsciencecreativity.com
-//Google Firebase Smart Home Automation System
+//ESP8266
 
 #include <FirebaseESP8266.h>
 #include <ESP8266WiFi.h>
 #include <Servo.h>
 #include <DHT.h>   
 
-#define ssid "******************"     //
-#define password "*********************" //
+#define ssid "******************"     
+#define password "*********************" 
 #define FIREBASE_HOST "****************" //Firebase Project URL Remove "https:" , "\" and "/"
-#define FIREBASE_AUTH "****************"          //Firebase Auth Token
+#define FIREBASE_AUTH "****************"      
 
 
 
