@@ -26,9 +26,7 @@ Our drone is controlled by WIFI signal, we capture the images through a camera i
 projet interface 
 
 <img src="App/public/images/interface.png" alt="projet interface" />
-For this project we chose to use the ESP32 microcontroller, for purely financial reasons. Associated with an OV2640 camera (2MG pixels) able to transmit in WIFI and live a video stream, images. The ESP32 is also programmable using the Arduino IDE. The ESP32 is also programmable using the Arduino IDE.
-
-
+For this project we chose to use the ESP8266(Node MCU 1.0V) and ESP32 microcontroller, for purely financial reasons. Associated with an OV2640 camera (2MG pixels) able to transmit in WIFI and live a video stream, images. The ESP32 is also programmable using the Arduino IDE. The two ESP choosed are also programmable using the Arduino IDE.
 
 The three-thruster arrangement only allows forward / reverse / yaw movement, while the fourth thruster also allows for lateral translation. The five-thruster variant allows all four horizontal thrusters to push simultaneously in any horizontal direction.
 In addition, placing the propellant outside the longitudinal axis of the vehicle will allow better turning moment, while providing the vehicle with high longitudinal stability.
