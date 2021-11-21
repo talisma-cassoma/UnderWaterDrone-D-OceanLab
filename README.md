@@ -4,6 +4,12 @@
 authors: 
 Talisma Manuel & Jeremias Bartolomeu<br>
 v1.0
+
+We pretend to built a not expensive ROV based on wifi control, now we know that it isnt as simple as it look like.
+things like the range of the wifi signal, the fluctuations in the T-S profiles of water masses are some factors to keep in mind.
+
+knowing all that we built one drone working under those limitations 
+
 this is a stable projet version that controls the bot with:<br> 
 - ESP32 CAM 
 - Node MCU 1.0V    
@@ -21,7 +27,7 @@ this is a stable projet version that controls the bot with:<br>
  
 ## Tools and technologies:
 
-Our drone is controlled by WIFI signal, we capture the images through a camera integrated into our circuit and we visualize the images thanks to the interface.
+we capture the images through a camera integrated into our circuit and we visualize the images thanks to the interface made with javascript (both backend and frontend).
 
 projet interface 
 

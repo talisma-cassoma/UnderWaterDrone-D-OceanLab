@@ -12,9 +12,15 @@
 
 
 
-const int motor1 = 14; //D5
-const int motor2 = 12; //D6
-const int motor3 = 13; //D7
+
+const int motor1A = 14; //D5
+const int motor1B = 0;  //D3
+
+const int motor2A = 12; //D6
+const int motor2B = 15; //D8
+
+const int motor3A = 13; //D7
+const int motor3B = 4;  //D2
 
 #define DHTPIN 2    // Connect Data pin of DHT to D2
 
@@ -32,13 +38,19 @@ void setup() {
   
   Serial.begin(115200);
 
-   pinMode(motor1, OUTPUT);
-   pinMode(motor2, OUTPUT);
-   pinMode(motor3, OUTPUT);
+   pinMode(motor1A, OUTPUT);
+   pinMode(motor2A, OUTPUT);
+   pinMode(motor3A, OUTPUT);
+   pinMode(motor1B, OUTPUT);
+   pinMode(motor2B, OUTPUT);
+   pinMode(motor3B, OUTPUT);
    
-   digitalWrite(motor1, LOW);
-   digitalWrite(motor2, LOW);
-   digitalWrite(motor3, LOW);
+   digitalWrite(motor1A, LOW);
+   digitalWrite(motor2A, LOW);
+   digitalWrite(motor3A, LOW);
+   digitalWrite(motor1B, LOW);
+   digitalWrite(motor2B, LOW);
+   digitalWrite(motor3B, LOW);
   
   dht.begin();
    
@@ -100,8 +112,13 @@ void BotControls(){
     
        //moves forward
        delay(1500);
-       digitalWrite(motor1, HIGH);
-       digitalWrite(motor2, HIGH);
+       //clockwise
+       digitalWrite(motor1A, HIGH); 
+       digitalWrite(motor1B, LOW);
+
+       //unclockwise
+       digitalWrite(motor2A, LOW); 
+       digitalWrite(motor2B, HIGH);
     
     if (Firebase.getString(Drone_moves, "/controls/turn")) {
       if (Drone_moves.dataTypeEnum() == fb_esp_rtdb_data_type_string) { 
@@ -119,8 +136,13 @@ void BotControls(){
                     //turn to RIGHT
                     if((angleDegree >= 0 && angleDegree < 90 )|| (angleDegree > 270  && angleDegree <= 360)){
 
-                       digitalWrite(motor1, HIGH);
-                       digitalWrite(motor2, LOW);
+                      //clockwise
+                      digitalWrite(motor1A, HIGH); 
+                      digitalWrite(motor1B, LOW);
+
+                      //stop
+                      digitalWrite(motor2A, LOW); 
+                      digitalWrite(motor2B, LOW);
                        //analogWrite(motor1, 244);
                        //analogWrite(motor2, angleDegree);
             }
@@ -129,8 +151,13 @@ void BotControls(){
              
                       //analogWrite(motor1, 200);
                       //analogWrite(motor2, 244);
-                      digitalWrite(motor1, LOW);
-                      digitalWrite(motor2, HIGH);
+                      //stop
+                      digitalWrite(motor1A, LOW); 
+                      digitalWrite(motor1B, LOW);
+
+                      //unclockwise
+                      digitalWrite(motor2A, LOW); 
+                      digitalWrite(motor2B, HIGH);
                      }
                    }
                 } else {Serial.println(Drone_moves.errorReason());}
@@ -139,19 +166,28 @@ void BotControls(){
            } else {Serial.println(Drone_moves.errorReason().c_str());
            
             //moves forward
-            digitalWrite(motor1, HIGH);
-            digitalWrite(motor2, HIGH);
+            delay(1500);
+            //clockwise
+            digitalWrite(motor1A, HIGH); 
+            digitalWrite(motor1B, LOW);
+
+             //unclockwise
+             digitalWrite(motor2A, LOW); 
+             digitalWrite(motor2B, HIGH);
            }
   //make drone dives     
      if (Firebase.getString(Drone_moves, "/controls/dive")) {
       if (Drone_moves.dataTypeEnum() == fb_esp_rtdb_data_type_string) { 
         String dive = Drone_moves.to<const char *>();
         if( dive == "on"){
-            digitalWrite(motor3, HIGH);
+            
+            digitalWrite(motor3A, HIGH);
+            digitalWrite(motor3B, LOW);
             Serial.print("dive: ");
             Serial.println(dive);
           }else{
-            digitalWrite(motor3, LOW);
+            digitalWrite(motor3A, LOW);
+            digitalWrite(motor3B, LOW);
             Serial.print("dive: ");
             Serial.println(dive);
           }
@@ -174,9 +210,12 @@ void loop() {
           }
         if( connection == "off"){
         delay(1500);
-        digitalWrite(motor1, LOW);
-        digitalWrite(motor2, LOW);
-        digitalWrite(motor3, LOW);
+        digitalWrite(motor1A, LOW);
+        digitalWrite(motor2A, LOW);
+        digitalWrite(motor3A, LOW);
+        digitalWrite(motor1B, LOW);
+        digitalWrite(motor2B, LOW);
+        digitalWrite(motor3B, LOW);
         }
        }
    }
