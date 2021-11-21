@@ -49,7 +49,7 @@ this app use firebase as midleware for comunicate our robot to our server
 
 <img src="App/public/images/firebaseDatabase.png" alt="firebase database"/><br/>
 
-we're using mask-RCNN for classifie marines species 
+we're using mask-RCNN for classifie marines species. 
 
 <img src="App/public/images/identifiedSpecie.png" width=25%/>
 
