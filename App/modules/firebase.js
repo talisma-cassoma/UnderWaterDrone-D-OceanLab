@@ -18,10 +18,11 @@ let setBot = function (branch, value){
   //console.log(value)
   if(branch=='rudder angle'){data = {angle: value}}
   else if(branch=='connection'){data = {connection: value}}
-  else if(branch=='turn'){
+  //turn on/off event while goes left or right 
+  else if(branch=='turn'){ 
     const joystickEvent = value
-    if(joystickEvent == "start"){ data = {turn: "on"}}
-    if(joystickEvent == "end"){data = {turn: "off"}}
+    if(joystickEvent == "start"){ data = {turn: "on"}} //alert the microcontroller to follow jostyck command   
+    if(joystickEvent == "end"){data = {turn: "off"}} // alert microcontroller to go forward
   }
   else if(branch=='dive'){data = {dive: value}}
   else if(branch=='rotation'){data = {rotation: value}}

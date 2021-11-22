@@ -1,4 +1,4 @@
-//ESP8266
+//ESP8266 Node MCU 1.0V 
 
 #include <FirebaseESP8266.h>
 #include <ESP8266WiFi.h>

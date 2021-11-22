@@ -8,13 +8,13 @@ v1.0
 We pretend to built a not expensive ROV based on wifi control, now we know that it isnt as simple as it look like.
 things like the range of the wifi signal, the fluctuations in the T-S profiles of water masses are some factors to keep in mind.
 
-knowing all that we built one drone working under those limitations 
+knowing all that, we built one drone working under those limitations.
 
 this is a stable projet version that controls the bot with:<br> 
 - ESP32 CAM 
 - Node MCU 1.0V    
 - Diode Rectifier - 
-- 3 Hobby Motor - Gear    
+- 3 DC Motor with     
 - L298N Motor Driver Board Module   
 - N-Channel MOSFET 60V 30A  
 - 2 10K Ohm Resistor  
@@ -32,7 +32,7 @@ we capture the images through a camera integrated into our circuit and we visual
 projet interface 
 
 <img src="App/public/images/interface.png" alt="projet interface" />
-For this project we chose to use the ESP8266(Node MCU 1.0V) and ESP32 microcontroller, for purely financial reasons. Associated with an OV2640 camera (2MG pixels) able to transmit in WIFI and live a video stream, images. The ESP32 is also programmable using the Arduino IDE. The two ESP choosed are also programmable using the Arduino IDE.
+For this project we choose to use the ESP8266(Node MCU 1.0V) and ESP32 microcontroller, for purely financial reasons. Associated with an OV2640 camera (2MG pixels) able to transmit in WIFI and live a video stream, images, the ESP32 is also programmable using the Arduino IDE. The two ESP choosed are also programmable using the Arduino IDE.
 
 The three-thruster arrangement only allows forward / reverse / yaw movement, while the fourth thruster also allows for lateral translation. The five-thruster variant allows all four horizontal thrusters to push simultaneously in any horizontal direction.
 In addition, placing the propellant outside the longitudinal axis of the vehicle will allow better turning moment, while providing the vehicle with high longitudinal stability.
