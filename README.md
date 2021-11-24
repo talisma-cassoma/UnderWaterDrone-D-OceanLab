@@ -10,7 +10,7 @@ things like the range of the wifi signal, the fluctuations in the T-S profiles o
 
 knowing all that, we built one drone working under those limitations.
 
-this is a stable projet version that controls the bot with:<br> 
+this is a stable projet version that we control the drone composed of:<br> 
 - ESP32 CAM 
 - Node MCU 1.0V    
 - Diode Rectifier - 
