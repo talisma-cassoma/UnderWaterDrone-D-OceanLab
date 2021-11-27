@@ -27,7 +27,7 @@ this is a stable projet version that we control the drone composed of:<br>
  
 ## Tools and technologies:
 
-we capture the images through a camera integrated into our circuit and we visualize the images thanks to the interface made with javascript (both backend and frontend).
+we capture the images through a camera integrated into our circuit and we visualize the images thanks to the interface made with javascript (both backend and frontend).and not connect vin to L298N 5+ 
 
 projet interface 
 
