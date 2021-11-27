@@ -22,7 +22,13 @@ this is a stable projet version that we control the drone composed of:<br>
 - DHT22/11 Humidity and Temperature Sensor  
 - BreadBoard   
 - Jumper Wires Pack - M/M   
-- Jumper Wires Pack - M/F   
+- Jumper Wires Pack - M/F
+- Wall Adapter Power Supply - 12VDC 2A
+- Female DC Power adapter - 2.1mm jack to screw terminal block
+- USB micro-B Cable - 6 Foot
+- Voltage Regulator 5v
+- 3 Capacitor Ceramic 0.1uF
+
 
  
 ## Tools and technologies:
