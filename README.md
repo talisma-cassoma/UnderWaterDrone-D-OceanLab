@@ -50,6 +50,7 @@ this is how the robot circuit look like <br/>
 <img src="App/public/images/bot_circuit.png" alt="projet circuit"/>
 <img src="App/public/images/esp32cam.png" alt="esp32cam" width=30%/>
 </p>
+We recommend soldering a 0.1uF ceramic capacitor to the positive and negative terminals of the DC motor, as shown in the diagram to help smooth out any voltage spikes.<br>
 we still increasing features to the projets so this circuit shall be more complete with time 
 
 we control our drone through a web browser (client side), The front-end of our web app communicates with the back-end by web socket protocol, for that we use the socket.io which is a JavaScript library for real-time web applications
