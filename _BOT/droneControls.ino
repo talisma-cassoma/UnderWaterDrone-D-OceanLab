@@ -2,8 +2,10 @@
 
 #include <FirebaseESP8266.h>
 #include <ESP8266WiFi.h>
-#include <Servo.h>
-#include <DHT.h>   
+//#include <Servo.h>
+#include <DHT.h>
+//#include "Adafruit_GPS.h"   
+
 
 #define ssid "******************"     
 #define password "*********************" 
@@ -11,46 +13,74 @@
 #define FIREBASE_AUTH "****************"      
 
 
+//MOTOR LEFT PINS
+const int DCMOTORDRIVERL298_PIN_INT1	5
+const int DCMOTORDRIVERL298_PIN_INT2	0
+const int DCMOTORDRIVERL298_PIN_ENA	4
 
+//MOTOR RIGHT PINS
+const int DCMOTORDRIVERL298_PIN_INT3	2
+const int DCMOTORDRIVERL298_PIN_INT4	16
+const int DCMOTORDRIVERL298_PIN_ENB	14
 
-const int motor1A = 14; //D5
-const int motor1B = 0;  //D3
+//UPPER MOTOR PINS
+const int motor3 15; 
 
-const int motor2A = 12; //D6
-const int motor2B = 15; //D8
+//DHT PINS
+const int DHT_PIN_DATA	9
+const int DHTTYPE DHT11
+DHT dht(DHT_PIN_DATA, DHTTYPE);
 
-const int motor3A = 13; //D7
-const int motor3B = 4;  //D2
+//GPS PINS
+#define GPSADAFUIT_PIN_RX	13
+#define GPSADAFUIT_PIN_TX	12
 
-#define DHTPIN 2    // Connect Data pin of DHT to D2
-
-#define DHTTYPE    DHT11
-DHT dht(DHTPIN, DHTTYPE);
-
-Servo servo;
 int angleDegree = 0; 
 
 FirebaseData Humidity_Temp_sensor;
 FirebaseData Drone_moves;
 FirebaseData Dive;
 
+void turnOff(uint8_t motor1, uint8_t motor2){
+digitalWrite(motor1, LOW);
+digitalWrite(motor2, LOW);
+
+}
+void turnOn(uint8_t motor1, uint8_t motor2){
+digitalWrite(motor1, HIGH);
+digitalWrite(motor2, HIGH);
+}
+void setClockwise(uint8_t motor1, uint8_t motor2){
+digitalWrite(motor1, HIGH); 
+digitalWrite(motor2, LOW);
+}
+void setUnclockwise(uint8_t motor1, uint8_t motor2){
+digitalWrite(motor1, LOW); 
+digitalWrite(motor2, HIGH);
+}
+
 void setup() {
   
   Serial.begin(115200);
-
-   pinMode(motor1A, OUTPUT);
-   pinMode(motor2A, OUTPUT);
-   pinMode(motor3A, OUTPUT);
-   pinMode(motor1B, OUTPUT);
-   pinMode(motor2B, OUTPUT);
-   pinMode(motor3B, OUTPUT);
+   // MOTOR LEFT:
+   pinMode(DCMOTORDRIVERL298_PIN_INT1, OUTPUT);
+   pinMode(DCMOTORDRIVERL298_PIN_INT2, OUTPUT);
+   pinMode(DCMOTORDRIVERL298_PIN_ENA, OUTPUT);
    
-   digitalWrite(motor1A, LOW);
-   digitalWrite(motor2A, LOW);
-   digitalWrite(motor3A, LOW);
-   digitalWrite(motor1B, LOW);
-   digitalWrite(motor2B, LOW);
-   digitalWrite(motor3B, LOW);
+   //MOTOR RIGH:
+   pinMode(DCMOTORDRIVERL298_PIN_INT3, OUTPUT);
+   pinMode(DCMOTORDRIVERL298_PIN_INT4, OUTPUT);
+   pinMode(DCMOTORDRIVERL298_PIN_ENB, OUTPUT);
+   
+   //turn off the motors
+   //left motor
+   turnOff(DCMOTORDRIVERL298_PIN_INT1, DCMOTORDRIVERL298_PIN_INT2);
+   digitalWrite(DCMOTORDRIVERL298_PIN_ENA);
+   
+   //right motor
+   turnOff(DCMOTORDRIVERL298_PIN_INT3, DCMOTORDRIVERL298_PIN_INT4);
+   digitalWrite(DCMOTORDRIVERL298_PIN_ENB, LOW);
+   
   
   dht.begin();
    
@@ -61,9 +91,6 @@ void setup() {
   }
   Serial.println ("");
   Serial.println ("WiFi Connected!");
-   //servo 
-    servo.attach(5); //D1
-    servo.write(0);  //set servo to 0°
   
   Firebase.begin(FIREBASE_HOST,FIREBASE_AUTH);  
   //Firebase.reconnectWiFi(true);
@@ -113,12 +140,10 @@ void BotControls(){
        //moves forward
        delay(1500);
        //clockwise
-       digitalWrite(motor1A, HIGH); 
-       digitalWrite(motor1B, LOW);
+       setClockwise(DCMOTORDRIVERL298_PIN_INT1, DCMOTORDRIVERL298_PIN_INT2);
 
        //unclockwise
-       digitalWrite(motor2A, LOW); 
-       digitalWrite(motor2B, HIGH);
+       setUnclockwise(DCMOTORDRIVERL298_PIN_INT3, DCMOTORDRIVERL298_PIN_INT4);
     
     if (Firebase.getString(Drone_moves, "/controls/turn")) {
       if (Drone_moves.dataTypeEnum() == fb_esp_rtdb_data_type_string) { 
@@ -129,20 +154,15 @@ void BotControls(){
 
                if (Drone_moves.dataTypeEnum() == fb_esp_rtdb_data_type_integer) {
                   angleDegree = Drone_moves.to<int>();
-                  servo.write(angleDegree);
-                  Serial.print("angulo: ");
-                  Serial.println(angleDegree);
-
+                  
                     //turn to RIGHT
                     if((angleDegree >= 0 && angleDegree < 90 )|| (angleDegree > 270  && angleDegree <= 360)){
 
                       //clockwise
-                      digitalWrite(motor1A, HIGH); 
-                      digitalWrite(motor1B, LOW);
+                      setClockwise(DCMOTORDRIVERL298_PIN_INT1, DCMOTORDRIVERL298_PIN_INT2);
 
                       //stop
-                      digitalWrite(motor2A, LOW); 
-                      digitalWrite(motor2B, LOW);
+                      turnOff(DCMOTORDRIVERL298_PIN_INT3, DCMOTORDRIVERL298_PIN_INT4);
                        //analogWrite(motor1, 244);
                        //analogWrite(motor2, angleDegree);
             }
@@ -152,12 +172,10 @@ void BotControls(){
                       //analogWrite(motor1, 200);
                       //analogWrite(motor2, 244);
                       //stop
-                      digitalWrite(motor1A, LOW); 
-                      digitalWrite(motor1B, LOW);
+                      turnOff(DCMOTORDRIVERL298_PIN_INT1, DCMOTORDRIVERL298_PIN_INT2);
 
                       //unclockwise
-                      digitalWrite(motor2A, LOW); 
-                      digitalWrite(motor2B, HIGH);
+                      setUnclockwise(DCMOTORDRIVERL298_PIN_INT3, DCMOTORDRIVERL298_PIN_INT4);
                      }
                    }
                 } else {Serial.println(Drone_moves.errorReason());}
@@ -168,12 +186,10 @@ void BotControls(){
             //moves forward
             delay(1500);
             //clockwise
-            digitalWrite(motor1A, HIGH); 
-            digitalWrite(motor1B, LOW);
+            setClockwise(DCMOTORDRIVERL298_PIN_INT1, DCMOTORDRIVERL298_PIN_INT2);
 
              //unclockwise
-             digitalWrite(motor2A, LOW); 
-             digitalWrite(motor2B, HIGH);
+             setUnclockwise(DCMOTORDRIVERL298_PIN_INT3, DCMOTORDRIVERL298_PIN_INT4);
            }
   //make drone dives     
      if (Firebase.getString(Drone_moves, "/controls/dive")) {
@@ -181,13 +197,13 @@ void BotControls(){
         String dive = Drone_moves.to<const char *>();
         if( dive == "on"){
             
-            digitalWrite(motor3A, HIGH);
-            digitalWrite(motor3B, LOW);
+            digitalWrite(motor3, HIGH);
+            //digitalWrite(motor3B, LOW);
             Serial.print("dive: ");
             Serial.println(dive);
           }else{
-            digitalWrite(motor3A, LOW);
-            digitalWrite(motor3B, LOW);
+            digitalWrite(motor3, LOW);
+            //digitalWrite(motor3B, LOW);
             Serial.print("dive: ");
             Serial.println(dive);
           }
@@ -210,12 +226,10 @@ void loop() {
           }
         if( connection == "off"){
         delay(1500);
-        digitalWrite(motor1A, LOW);
-        digitalWrite(motor2A, LOW);
-        digitalWrite(motor3A, LOW);
-        digitalWrite(motor1B, LOW);
-        digitalWrite(motor2B, LOW);
-        digitalWrite(motor3B, LOW);
+        
+        turnOff(DCMOTORDRIVERL298_PIN_INT1, DCMOTORDRIVERL298_PIN_INT2);
+        
+        turnOff(DCMOTORDRIVERL298_PIN_INT3, DCMOTORDRIVERL298_PIN_INT4;
         }
        }
    }
