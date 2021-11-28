@@ -14,21 +14,21 @@
 
 
 //MOTOR LEFT PINS
-const int DCMOTORDRIVERL298_PIN_INT1	5
-const int DCMOTORDRIVERL298_PIN_INT2	0
-const int DCMOTORDRIVERL298_PIN_ENA	4
+const int DCMOTORDRIVERL298_PIN_INT1 = 5;
+const int DCMOTORDRIVERL298_PIN_INT2 = 0;
+const int DCMOTORDRIVERL298_PIN_ENA	= 4;
 
 //MOTOR RIGHT PINS
-const int DCMOTORDRIVERL298_PIN_INT3	2
-const int DCMOTORDRIVERL298_PIN_INT4	16
-const int DCMOTORDRIVERL298_PIN_ENB	14
+const int DCMOTORDRIVERL298_PIN_INT3 = 2;
+const int DCMOTORDRIVERL298_PIN_INT4 = 16;
+const int DCMOTORDRIVERL298_PIN_ENB	= 14;
 
 //UPPER MOTOR PINS
-const int motor3 15; 
+const int motor3 = 15; 
 
 //DHT PINS
-const int DHT_PIN_DATA	9
-const int DHTTYPE DHT11
+#define DHT_PIN_DATA	9
+#define DHTTYPE DHT11
 DHT dht(DHT_PIN_DATA, DHTTYPE);
 
 //GPS PINS
@@ -75,7 +75,7 @@ void setup() {
    //turn off the motors
    //left motor
    turnOff(DCMOTORDRIVERL298_PIN_INT1, DCMOTORDRIVERL298_PIN_INT2);
-   digitalWrite(DCMOTORDRIVERL298_PIN_ENA);
+   digitalWrite(DCMOTORDRIVERL298_PIN_ENA, LOW);
    
    //right motor
    turnOff(DCMOTORDRIVERL298_PIN_INT3, DCMOTORDRIVERL298_PIN_INT4);
@@ -163,14 +163,11 @@ void BotControls(){
 
                       //stop
                       turnOff(DCMOTORDRIVERL298_PIN_INT3, DCMOTORDRIVERL298_PIN_INT4);
-                       //analogWrite(motor1, 244);
-                       //analogWrite(motor2, angleDegree);
+
             }
                     //turn to LEFT
                     if((angleDegree >= 90 && angleDegree <= 270) ){
-             
-                      //analogWrite(motor1, 200);
-                      //analogWrite(motor2, 244);
+
                       //stop
                       turnOff(DCMOTORDRIVERL298_PIN_INT1, DCMOTORDRIVERL298_PIN_INT2);
 
@@ -229,7 +226,7 @@ void loop() {
         
         turnOff(DCMOTORDRIVERL298_PIN_INT1, DCMOTORDRIVERL298_PIN_INT2);
         
-        turnOff(DCMOTORDRIVERL298_PIN_INT3, DCMOTORDRIVERL298_PIN_INT4;
+        turnOff(DCMOTORDRIVERL298_PIN_INT3, DCMOTORDRIVERL298_PIN_INT4);
         }
        }
    }
