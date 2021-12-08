@@ -67,6 +67,9 @@ this app use firebase as midleware for comunicate our drone to our nodejs server
 
 we're using RCNN-mask to identify and classify the fish in the images. 
 
+this actual neural network is trained to identify 5 species: 
+- 'abudefduf vaigiensis', 'Amphiprion clarkii', 'Chaetodon lunulatus','Chromis chrysura', 'Myripristis kuntee'  
+
 <img src="App/public/images/identifiedSpecie.png" width=25%/>
 
 <a href="https://www.notion.so/projeto-INTELLCAP-8fc0aab3e8a24e9c8a9eb93412a3a829">chaier de charge sur NOTION</a>
