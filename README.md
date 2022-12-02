@@ -26,8 +26,8 @@ model v0.1
   - [x]  conception de la carcasse (Autodesk fusion 360)
     <p align="center">
       <!--img src="./assets/drone_full_assemble.png"        /-->
-      <img src="./assets/drone_head.png"                 />
-      <img src="./assets/drone_head_interior_vision.png" />
+      <img src="./assets/drone_head.png"                 width="90%"/>
+      <img src="./assets/drone_head_interior_vision.png" width="90%"/>
     </p>
     
 ### ELECTRONICS PARTS(hardware):
