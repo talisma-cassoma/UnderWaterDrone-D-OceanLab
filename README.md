@@ -30,6 +30,11 @@ model v0.1
       <img src="./assets/drone_head_interior_vision.png" width="90%"/>
     </p>
     
+    - [x]  light system
+    - [x]  camera tilting system
+    - [x]  water proof electronic pipe
+    
+    
 ### ELECTRONICS PARTS(hardware):
    - [x]  why pixhawk as hardware
         - [x]  developer une solution du zero prendrait plus de temps et d’effort
@@ -42,5 +47,11 @@ model v0.1
 
    - [x]  algorithme de reconnaissance real-time
         - [x]  yolov5
+   
+   - [ ]  tilting camera
+   - [ ]  self leveling 
+   - [ ]  depth hold
+   - [ ]  lights
+   - [ ]  inteligent battery life control
    - [ ]  déplacement autonome du robot
         - [ ]  ardusub 
