@@ -2,7 +2,7 @@
 # D~OceanLab🤖
 
 authors:
-Talisma Manuel & Jeremias Bartolomeu<br>
+Talisma Manuel<br>
 model v0.1
 
 <p align="center">
@@ -23,11 +23,10 @@ model v0.1
 
 ### MECHANICAL PARTS:
 
-  - [x]  conception de la carcasse (Autodesk fusion 360)
+  - [x]  conception de la carcasse 
     <p align="center">
       <!--img src="./assets/drone_full_assemble.png"        /-->
-      <img src="./assets/drone_head.png"                 width="90%"/>
-      <img src="./assets/drone_head_interior_vision.png" width="90%"/>
+      <img src="./assets/D-OceanLab.png" width="90%"/>
     </p>
     
     - [x]  light system
