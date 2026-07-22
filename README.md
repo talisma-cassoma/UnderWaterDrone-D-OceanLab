@@ -1,7 +1,7 @@
 
 # D≈OceanLab
 
-authors:
+author:
 Talisma Manuel<br>
 model v0.1
 
